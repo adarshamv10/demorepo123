@@ -1,0 +1,30 @@
+name: Success/Failure Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      should_fail:
+        description: 'Should this job fail?'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+        - 'true'
+        - 'false'
+
+jobs:
+  test-success-failure:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Success or Failure Test
+        run: |
+          if [ "${{ github.event.inputs.should_fail }}" == "true" ]; then
+            echo "This job will fail for testing!"
+            exit 1
+          else
+            echo "This job will succeed!"
+            exit 0
+          fi
